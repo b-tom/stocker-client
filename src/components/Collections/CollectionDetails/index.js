@@ -3,12 +3,12 @@ import COLLECTION_SERVICE from '../../../services/CollectionService';
 import USER_SERVICE from '../../../services/AuthService';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Graph from '../../Graph';
 
 export default class CollectionDetails extends Component {
     state = {
         collection: {},
         followed: false,
+        stocksInCollection: {}
     };
 
     loadCollectionDetails = () => {
@@ -18,24 +18,21 @@ export default class CollectionDetails extends Component {
                 this.setState({ collection });
             })
             .then(() => {
-                this.state.collection?.symbols?.forEach(symbol => {
-                    axios
-                        .get(`http://api.marketstack.com/v1/eod?access_key=1c3e794b3e21ba8a689dc2f85fc8317c&symbols=${symbol.symbol}&date_from=2020-01-01&date_to=${this.props.today}`, { json: true },)
+                    this.state.collection?.symbols?.forEach(symbol => {
+                        axios
+                        .get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol.symbol}&token=bulj6l748v6p4m01tscg`, { json: true})
                         .then(response => {
-                            <Graph stockInfo={response.data} />
-                        })  
+                            this.setState({
+                                stocksInCollection: {...this.state.stocksInCollection, [symbol.symbol]: response.data}
+                            })
+                        })
+                    })
                 })
-            })
             .catch(err => console.log(err));
     };
 
-    // getStockData = () => {
-        
-    // }
-
     componentDidMount() {
         this.loadCollectionDetails()
-        // this.getStockData();
         this.isfollowing();
     }
 
@@ -43,27 +40,10 @@ export default class CollectionDetails extends Component {
         COLLECTION_SERVICE.deleteCollection(collectionId)
             .then(() => {
                 this.props.onCollectionChangeAfterDelete(collectionId);
-                this.props.history.push('/');
+                this.props.history.push('/collections');
             })
             .catch(err => console.log(err));
     };
-
-    showSymbols = () => {
-        // return this.state.collection?.symbols?.map(symbol => {
-        //     axios
-        //         .get(`http://api.marketstack.com/v1/eod?access_key=1c3e794b3e21ba8a689dc2f85fc8317c&symbols=${symbol.symbol}&date_from=2020-01-01&date_to=${this.props.today}`, { json: true },)
-        //         .then(response => {
-        //     return (
-        //         <div>
-        //             <h2> {symbol.symbol}</h2>
-        //             <h2>{symbol.name}</h2>
-        //             <Graph stockInfo={response.data.data} />
-        //             <h6>Current Value: {response.data.data[0].close }</h6>
-        //         </div>
-        //      )   
-        //     })
-    // })
-    }
 
     followCollection = () => {
         const followedCollections = this.state.collection._id
@@ -98,32 +78,75 @@ export default class CollectionDetails extends Component {
         }
     }
 
-    
+    displayStocks = () => {
+        const stocks = this.state?.stocksInCollection && Object.values(this.state?.stocksInCollection)?.map(stock => {
+            return (
+                <div className='card-content' key={stock.ticker}>
+                    <div className='media'>
+                        <div className='media-left'>
+                            <figure className='image is-48x48'>
+                                <img src={stock.logo ? stock.logo : 'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg'} alt='logo'/>
+                            </figure>           
+                        </div>
+                        <div className='media-content columns'>
+                            <div className='column'>
+                                <h2 className='title is-6'>{stock.ticker}</h2>
+                                <h2>{stock.name}</h2>
+                                <h6>{stock.finnhubIndustry}</h6>
+                            </div>
+                            <div className='column'>
+                                <h2>IPO: {stock.ipo}</h2>
+                                <h2>Market Cap: {stock.marketCapitalization}</h2>
+                                <h6>Share Value: {stock.shareOutstanding}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <Link>Details</Link>
+                </div>
+            )
+        })
+
+        return stocks
+    }
+
     render() {
         return (
             <section>
-                {<h3>{this.state.collection?.name} by {this.state.collection?.user?.username}</h3>}
-                <p>{this.state.collection?.description}</p>
-                <h4>Symbols</h4> 
-                    {this.showSymbols()}
-                {this.props.currentUser._id === this.state.collection?.user?._id && (
-                    <>
-                        <Link 
-                            to={{
-                                pathname: `/collections/${this.state.collection?._id}/edit`,
-                                collection: this.state.collection
-                            }}
-                        > 
-                        Update Collection 
-                        </Link>
-                        <button onClick={() => this.deleteCollection(this.state.collection?._id)}> Delete Collection </button>
-                    </>
-                )}
-                {this.state.followed ? 
-                    <button onClick={() => this.unfollowCollection()}> Unfollow </button>
-                    :
-                    <button onClick={() => this.followCollection()}> Follow </button>
-                }
+                {<h3 className='title is-3'>{this.state.collection?.name} by {this.state.collection?.user?.username}</h3>}
+                <p className='subtitle is-3'>{this.state.collection?.description}</p>
+                <div className='collectionDetailsContainer'>
+                    <div className='card'>
+                        {this.state.collection?.symbols?.length > 0
+                        ?
+                        <div>
+                            <h4 className='subtitle is-4'>Symbols</h4> 
+                            {this.displayStocks()}
+                        </div> 
+                        :
+                        <h4 className='subtitle is-3'>This Collection has no stocks</h4>
+                        }
+                    </div>
+                    <div className='collectionDetailsButtons'>
+                        {this.props.currentUser._id === this.state.collection?.user?._id && (
+                            <>
+                                <Link className='button is-link'
+                                    to={{
+                                        pathname: `/collections/${this.state.collection?._id}/edit`,
+                                        collection: this.state.collection
+                                    }}
+                                > 
+                                Update Collection 
+                                </Link>
+                                <button className='button is-link' onClick={() => this.deleteCollection(this.state.collection?._id)}> Delete Collection </button>
+                            </>
+                        )}
+                        {this.state.followed ? 
+                            <button className='button is-danger' onClick={() => this.unfollowCollection()}> Unfollow </button>
+                            :
+                            <button className='button is-link' onClick={() => this.followCollection()}> Follow </button>
+                        }
+                    </div>
+                </div>
             </section>
         )
     }

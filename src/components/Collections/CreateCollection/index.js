@@ -10,7 +10,8 @@ export default class CreateCollection extends Component {
         user:this.props.currentUser,
         message: null,
         followers:[],
-        tags:[]
+        tags:[],
+        theTag:'',
     }
 
     handleInputChange = event => {
@@ -18,9 +19,9 @@ export default class CreateCollection extends Component {
         this.setState({ [name]: value });
     };
 
-    handleFormSubmission = event => {
-        const theTags = [...this.state.tags.split(" ")]
-        this.setState({ tags: theTags })
+    handleFormSubmission  = async event => {
+        const theTags = [...this.state.theTag.split(" ")]
+        await this.setState ({ tags: theTags })
         event.preventDefault();
         const { name, description, symbols, totalValue, user, followers, tags } = this.state;
         COLLECTION_SERVICE.createCollection({ name, description, symbols, totalValue, user, followers, tags })
@@ -37,10 +38,10 @@ export default class CreateCollection extends Component {
     };
 
     render() {
-        const { name, description, tags } = this.state;
+        const { name, description, theTag } = this.state;
         return (
             <div className='field'>
-                <h2>Create a new Collection</h2>
+                <h2 className='title is-3' >Create a new Collection</h2>
 
                 <form className='field' onSubmit={this.handleFormSubmission}>
                     <label className='label'>
@@ -66,15 +67,15 @@ export default class CreateCollection extends Component {
                     <label className='label'>
                         Tags
                         <input className='input'
-                            name='tags'
+                            name='theTag'
                             type='text'
                             placeholder='#stockEr'
-                            value={tags}
+                            value={theTag}
                             onChange={this.handleInputChange}
                         />
                     </label>
 
-                    <button className='button is-success'> Create Collection </button>
+                    <button className='button is-link'> Create Collection </button>
                 </form>
             </div>
         );

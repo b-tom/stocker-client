@@ -13,8 +13,10 @@ const SYMBOL_SERVICE = {
     },
     getSymbol(id) {
         return service.get(`/api/symbols/${id}`)
+    },
+    searchSymbol(searchValue) {
+        return service.get(`/api/symbols/${searchValue}`)
     }
-
 }
 
 export default SYMBOL_SERVICE;

@@ -26,7 +26,7 @@ export default class ListCollections extends Component {
         return (
             <>
                 <div >
-                    <Link className='button is-primary' to='/create-collection'>Create Collection</Link>
+                    <Link className='button is-link' to='/create-collection'>Create Collection</Link>
                 </div>
                 <div className='columns'>
                     <div className='column'>
@@ -36,7 +36,7 @@ export default class ListCollections extends Component {
                                 {this.props.collections.map(collection => (
                                     <div className='card exploreSymbol' key={collection._id}>
                                         <div className='card-content media-content'>
-                                            <h2 className='title is-4'>{collection.name} by {collection.user.username}</h2>
+                                            <h2 className='title is-4'>{collection.name}</h2>
                                             <h6 className='subtitle is-6'>{collection.description}</h6>
                                             <h6>{collection?.followers?.length} Followers</h6>
                                             <Link to={`collections/${collection._id}`}>

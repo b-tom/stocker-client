@@ -9,8 +9,6 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    border: solid 1px black;
-    background-color: rgb(70, 131, 189);
 }
 
 .navbar{
@@ -47,4 +45,89 @@
     align-items: center;
     justify-content: center;
 
+}
+
+.graphContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.buttonsGraphs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.buttonsGraphs > button{
+    margin: 10px;
+}
+
+.container{
+    background-color: white;
+    margin-bottom: 25px;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 33%;
+}
+
+.stockGraphContainer{
+    width: 80%;
+    margin-top: 30px;
+}
+
+.mainStockContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background-color: white;
+}
+
+.background{
+    background-color: rgb(243,242,239);
+}
+
+.collectionDetailsContainer{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.collectionDetailsButtons{
+    margin: 25px;
+}
+.collectionDetailsButtons > button {
+    margin: 0 5px;
+}
+.buttonCollectionUpdate{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    margin: 5px;
+}
+.buttonCollectionUpdate > button {
+    margin: 2px 10px
+}
+.exploreStocksContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.exploreStocksContainerButtons > button{
+    margin: 5px 8px;
+}
+.compProfDetails{
+    display: flex;
+    flex-direction: row;
 }

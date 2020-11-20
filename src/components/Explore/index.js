@@ -20,16 +20,16 @@ export default class Stocks extends Component {
         });
     };
 
-    onSearch = async (event) => {
-        const { value } = event.target;
-        this.onChange(event);
-        const filteredStock = this.state.listOfStocks.filter((item) => 
-            item.symbol?.toLowerCase().includes(value.toLowerCase()) || item.description?.toLowerCase().includes(value.toLowerCase())
-        );
-        this.setState({
-            stocksToShow: filteredStock,
-        })
-    }
+    // onSearch = async (event) => {
+    //     const { value } = event.target;
+    //     this.onChange(event);
+    //     const filteredStock = this.state.listOfStocks.filter((item) => 
+    //         item.symbol?.toLowerCase().includes(value.toLowerCase()) || item.description?.toLowerCase().includes(value.toLowerCase())
+    //     );
+    //     this.setState({
+    //         stocksToShow: filteredStock,
+    //     })
+    // }
 
     render(){
         if(this.state.responseLoading) {
@@ -37,17 +37,6 @@ export default class Stocks extends Component {
         }
         return(
             <>
-                <section>
-                    <div className= "md-form active-cyan active-cyan-2 mb-3 searchBar" >
-                        <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Search"
-                            name="search"
-                            onChange={this.onSearch}
-                        />
-                    </div>
-                </section>
                 <div className='columns'>
                     <div className='column column-container'>
                         <h1 className='title is-3'>Explore Symbols</h1>

@@ -20,6 +20,30 @@ export default class ListSymbols extends Component {
         this.databaseCall(this.state.limit, this.state.skip);
     }
 
+    // componentDidUpdate(prevState) {
+    //     if(JSON.stringify(this.state.limit) !== JSON.stringify(prevState.limit)) {
+    //         this.databaseCall(this.state.limit, this.state.skip);
+    //     }
+    // }
+    
+    renderStocks = () => {
+        return (
+            this.state.symbols?.map(symbol => (
+                <div className='card exploreSymbol fancy_card' key={symbol._id}>
+                    <div className='card-content media-content'>
+                        <h2 className='title is-4'>{symbol.symbol}</h2>
+                        <h6 className='subtitle is-6'>{symbol.description}</h6>
+                        <Link to= {`/details/${symbol._id}` }>
+                            Show Details
+                        </Link>
+                    </div>
+                </div>
+            ))
+            
+        
+        )
+    }
+
     databaseCall = (limit, skip) => {
         SYMBOL_SERVICE.getSymbols(limit, skip)
         .then(responseFromServer => {
@@ -28,39 +52,27 @@ export default class ListSymbols extends Component {
         })
     }
 
-    // goBack = () => {
-    //     // let limit = this.state.limit - 30;
-    //     // let skip = this.state.skip - 30;
-    //     // this.setState({ limit, skip });
-    //     this.databaseCall(this.state.limit - 30, this.state.skip - 30);
-    // }
+    goBack = () => {
+        let skip = Number(this.state.skip) - 30;
+        this.setState({ skip });
+        this.databaseCall(this.state.limit, skip );
+    }
 
-    // goForward = () => {
-    //     // let limit = this.state.limit + 30;
-    //     // let skip = this.state.skip + 30;
-    //     // this.setState({ limit, skip });
-    //     this.databaseCall(this.state.limit + 30, this.state.skip + 30);
-    // }
+    goForward = () => {
+        let skip = Number(this.state.skip) + 30;
+        this.setState({ skip });
+        this.databaseCall(this.state.limit, skip);
+    }
 
     render() {
         return (
-            <section>
-                <div>
-                    {/* <button onClick={this.goBack()}>{`<<`}</button>
-                    <button onClick={this.goForward()}>{`>>`}</button> */}
+            <section className='exploreStocksContainer'>
+                <div className='exploreStocksContainerButtons'>
+                    <button className='button is-link' onClick={() => this.goBack()}>{`   <<   `}</button>
+                    <button className='button is-link' onClick={() => this.goForward()}>{`   >>   `}</button>
                 </div>
-                <div className='exploreSymbolContainer'>
-                    {this.state.symbols?.map(symbol => (
-                            <div className='card exploreSymbol fancy_card' key={symbol._id}>
-                                <div className='card-content media-content'>
-                                    <h2 className='title is-4'>{symbol.symbol}</h2>
-                                    <h6 className='subtitle is-6'>{symbol.description}</h6>
-                                    <Link to= {`/details/${symbol._id}` }>
-                                        Show Details
-                                    </Link>
-                                </div>
-                            </div>
-                    ))}
+                <div className='exploreSymbolContainer'> 
+                    {this.renderStocks()}
                 </div>
             </section>
         )

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import LandingPage from '../LandingPage';
-import axios from 'axios'
+import axios from 'axios';
+import Graph from '../Graph';
+import { Link } from 'react-router-dom';
+import '../../App';
+import 'bulma/css/bulma.css';
 
 export default class Home extends Component {
     constructor(props){
@@ -12,53 +16,63 @@ export default class Home extends Component {
     
     componentDidMount(){
         this.props.updateOnLogin()
-
-        this.props?.followedStock?.map(stock => {
-            return (
-                axios
-                    .get(`http://api.marketstack.com/v1/eod?access_key=1c3e794b3e21ba8a689dc2f85fc8317c&symbols=${stock.symbol.symbol}&date_from=${this.state.startDate}&date_to=${this.props.today}`, { json: true },)
-                    .then(response => {
-                        this.setState ({
-                            stockInfo: response.data.data,
-                            currentValue: response.data.data[0].close,
-                            user: this.props.currentUser._id,
-                            responseLoading: false,
-                        })
-                    }))
-        })
+        this.getALittleDataOfc()
     }
 
     diplayFollowedStocks = () => {
-        return this.props?.followedStock?.map(stock => {
-            return(
-                <div key={stock?.symbol._id}>
-                    <h2>{stock?.symbol.symbol}</h2>
-                    <h2>{stock.currentValue}</h2>
+        const values =  this.state?.followedStockData && Object.values(this.state?.followedStockData)?.map(stock => {
+            return (
+            <div className='stockGraphContainer' key={stock[0].symbol}>
+                <div className=''>
+                    <Link className='subtitle is-3' to={`/details/${this.getStockId(stock[0].symbol)}`} > {stock[0].symbol} </Link>
                 </div>
-            )
-        })
+                <Graph className='' stockInfo={stock} />
+                
+            </div>
+        )}) 
+        return values
     }
 
+    componentDidUpdate(prevProps) {
+        if(JSON.stringify(this.props.followedStock) !== JSON.stringify(prevProps.followedStock)) {
+            this.getALittleDataOfc();
+        }
+    }
+
+
+    getALittleDataOfc = () => {
+        this.props?.followedStock?.forEach(stock => {
+            axios
+                .get(`http://api.marketstack.com/v1/eod?access_key=7eb019f9be084b7f7e5807177c92bd88&symbols=${stock.symbol.symbol}&date_from=2020-01-01&date_to=${this.props.today}`, { json: true },)
+                .then(response => {
+                    this.setState({
+                        followedStockData: {...this.state.followedStockData, [stock.symbol.symbol]: response.data.data},
+                    });
+                });
+        });
+    }
+
+    getStockId = (stock) => {
+        this.props.followedStock.forEach(eachStock => {
+            if(eachStock.symbol.symbol === stock) {return eachStock.symbol._id};
+        })
+    }
     
     render() {
-        console.log(this.props.followedStock)
         return (
-            <>
+            <div className='background'>
                 {this.props.currentUser ? 
-                    <div>
-                        <h2> Followed Stocks </h2>
-                        <div>
-                            {this.props.followedStock ? 
-                                this.diplayFollowedStocks()
-                            :
-                                ''
-                            }
-                        </div>
+                    <div className='mainStockContainer'>
+                        {this.props.followedStock ? 
+                            this.diplayFollowedStocks()
+                        :
+                            ''
+                        }
                     </div>
                     :
                     <LandingPage />
                 }
-            </>
+            </div>
         )
     }
 }

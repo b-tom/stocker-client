@@ -1,6 +1,6 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import './App.css';
 import 'bulma/css/bulma.css'
 
 import AUTH_SERVICE from './services/AuthService';
@@ -20,6 +20,7 @@ import CreateCollection from './components/Collections/CreateCollection';
 import CollectionDetails from './components/Collections/CollectionDetails';
 import EditCollection from './components/Collections/EditCollection';
 import GetCollections from './components/Collections/GetCollections';
+import Search from './components/Search';
 
 export default class App extends React.Component {
     state = {
@@ -62,7 +63,6 @@ export default class App extends React.Component {
         })
         .catch(err => console.log(err));
     };
-
 
     updateUser = user => {
         this.setState({ currentUser: user });
@@ -123,7 +123,7 @@ export default class App extends React.Component {
                         <Route 
                             exact 
                             path='/' 
-                            render={props => <Home {...props} currentUser={this.state.currentUser} followedStock={this.state?.followedStock} updateOnLogin={this.updateOnLogin}/>} 
+                            render={props => <Home {...props} currentUser={this.state.currentUser} followedStock={this.state?.followedStock} updateOnLogin={this.updateOnLogin} today={this.state.today}/>} 
                         />
                         <Route 
                             path='/signup-page' 
@@ -174,6 +174,12 @@ export default class App extends React.Component {
                             authorized={this.state.currentUser}
                             redirect={'/signup-page'}
                             render={props => <GetCollections {...props} collections={this.state.collections} currentUser={this.state.currentUser} allCollections={this.state.allCollections}/>}
+                        />
+                       <ProtectedRoute
+                            path='/search'
+                            authorized={this.state.currentUser}
+                            redirect={'/signup-page'}
+                            render={props => <Search {...props} currentUser={this.state.currentUser} />}
                         />
                     </Switch>
                 </BrowserRouter>
