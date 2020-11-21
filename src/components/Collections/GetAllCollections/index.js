@@ -5,7 +5,8 @@ import '../../../App.css';
 
 const GetAllCollections = props => {
     return (
-        <section>
+        <section className='exploreStocksContainer'>
+            <h1 className='title is-3'>Explore Collections</h1>
             <div className='exploreSymbolContainer'>
                 {props.allCollections?.map(collection => (
                     <div className='card exploreSymbol' key={collection?._id}>

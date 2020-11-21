@@ -67,6 +67,7 @@ export default class ListSymbols extends Component {
     render() {
         return (
             <section className='exploreStocksContainer'>
+                <h1 className='title is-3'>Explore Symbols</h1>
                 <div className='exploreStocksContainerButtons'>
                     <button className='button is-link' onClick={() => this.goBack()}>{`   <<   `}</button>
                     <button className='button is-link' onClick={() => this.goForward()}>{`   >>   `}</button>

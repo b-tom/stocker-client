@@ -21,6 +21,7 @@ import CollectionDetails from './components/Collections/CollectionDetails';
 import EditCollection from './components/Collections/EditCollection';
 import GetCollections from './components/Collections/GetCollections';
 import Search from './components/Search';
+import SymbolsRedirect from './components/Stock/SymbolsRedirect';
 
 export default class App extends React.Component {
     state = {
@@ -180,6 +181,12 @@ export default class App extends React.Component {
                             authorized={this.state.currentUser}
                             redirect={'/signup-page'}
                             render={props => <Search {...props} currentUser={this.state.currentUser} />}
+                        />
+                       <ProtectedRoute
+                            path={'/stocks/:symbol'}
+                            authorized={this.state.currentUser}
+                            redirect={'/signup-page'}
+                            render={props => <SymbolsRedirect {...props} currentUser={this.state.currentUser} symbols={this.state.symbols}/>}
                         />
                     </Switch>
                 </BrowserRouter>

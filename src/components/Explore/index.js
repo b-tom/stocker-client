@@ -39,11 +39,11 @@ export default class Stocks extends Component {
             <>
                 <div className='columns'>
                     <div className='column column-container'>
-                        <h1 className='title is-3'>Explore Symbols</h1>
+                        {/* <h1 className='title is-3'>Explore Symbols</h1> */}
                         <ListSymbols  currentUser={this.props.currentUser} symbols={this.state.stocksToShow}/>
                     </div>
                     <div className='column column-container'>
-                        <h1 className='title is-3'>Explore Collections</h1>
+                        {/* <h1 className='title is-3'>Explore Collections</h1> */}
                         <GetAllCollections allCollections={this.props.allCollections} currentUser={this.props.currentUser} />
                     </div>
                 </div>

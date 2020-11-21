@@ -141,6 +141,7 @@ export default class Stock extends Component {
                     minThreshold,
                     maxThreshold
                 })
+                this.props.history.push(`/`);
             })
             .catch(err => console.log(err));
     };
@@ -151,6 +152,8 @@ export default class Stock extends Component {
             this.setState({
                 isFollowing: true,
                 followingData: stockData,
+                // minThreshold: stockData.minThreshold,
+                // maxThreshold: stockData.maxThreshold
             })
         }
     }
@@ -168,7 +171,6 @@ export default class Stock extends Component {
     render() {      
         const { symbol, currentValue, minThreshold, maxThreshold } = this.state;
         const isFollowing = this.props.stocksFollowedByUser?.find(stock => stock.symbol.symbol === this.state.symbol.symbol);
-        console.log(this.state.companyNews)
         return (
             <div>
                <div>

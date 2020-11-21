@@ -101,7 +101,7 @@ export default class CollectionDetails extends Component {
                             </div>
                         </div>
                     </div>
-                    <Link>Details</Link>
+                    <Link to={{pathname:`/stocks/${stock.ticker}`}}>Details</Link>
                 </div>
             )
         })

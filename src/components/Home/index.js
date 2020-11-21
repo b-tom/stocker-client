@@ -24,7 +24,7 @@ export default class Home extends Component {
             return (
             <div className='stockGraphContainer' key={stock[0].symbol}>
                 <div className=''>
-                    <Link className='subtitle is-3' to={`/details/${this.getStockId(stock[0].symbol)}`} > {stock[0].symbol} </Link>
+                    <Link className='subtitle is-3' to={`/stocks/${stock[0].symbol}`} > {stock[0].symbol} </Link>
                 </div>
                 <Graph className='' stockInfo={stock} />
                 
